@@ -173,7 +173,9 @@ int main(int argc, char** argv) {
                   case 11:
                      
                         b.niv = 3;  // Background "stage1.png" pour le bouton terre1      
-                        
+                        Mix_PlayMusic(b.musicst,-1);
+                        Mix_AllocateChannels(10);
+               Mix_VolumeMusic(b.vol);
                        
                     break;
                
@@ -182,10 +184,7 @@ int main(int argc, char** argv) {
                         
                     break;
                   case 13:
-                        b.niv = 4;  // Background "stage3.png" pour le bouton mee1                    
-                        Mix_PlayMusic(b.musicst,-1);
-                        Mix_AllocateChannels(10);
-                        Mix_VolumeMusic(b.vol);
+                        b.niv = 4;  // Background "stage3.png" pour le bouton mee1      
                         
                     break;
                    
@@ -329,43 +328,49 @@ ecran = SDL_SetVideoMode(800, 630, 32, SDL_SWSURFACE | SDL_DOUBLEBUF | SDL_FULLS
         }
          if (b.niv==4){
              animation3(&b,ecran);
-             if (right==1){
+         }
+       if (b.niv==3){
+           animation1(&b,ecran);
+           if (right==1){
                a++;
                b.vol++;
                Mix_VolumeMusic(b.vol);
            }
-         }
-       if (b.niv==3){
-           animation1(&b,ecran);
-           
        }
       
-         if (multi_player==1 && (b.niv == 3 || b.niv == 4 || b.niv == 5)) {
-        SDL_Rect left = {0, 0, ecran->w / 2, ecran->h};
-        SDL_Rect right = {ecran->w / 2, 0, ecran->w / 2, ecran->h};
-        
-        // Afficher la partie gauche de l'écran
-        aff_partage(b, ecran, left);
-        
-        // Afficher la partie droite de l'écran
-        aff_partage(b, ecran, right);
-    } else {
-        // Afficher le fond d'écran normalement
-        Aff_Background(b, ecran, showPerso);
-    }
+     
         // Affichage du background
-        //Aff_Background(b, ecran, showPerso);
-   
-      if(right==1 && (b.niv == 3 || b.niv == 4 || b.niv == 5)){
-         scrolling(&b,1,50);  
+        Aff_Background(b, ecran, showPerso);
+    /*   if(multi_player==1 && (b.niv ==3 ||b.niv ==4 ||b.niv ==5 )){
+          SDL_Rect left={0,0,ecran->w /2 ,ecran->h /2};
+          SDL_Rect left={ecran->w /2,0,ecran->w /2 ,ecran->h /2};
+          aff_partage(b,ecran);
+       }
+       else{
+           SDL_Rect full_screen={0,0,ecran->w,ecran->h};
+           Aff_Background(b, ecran,&full_screen);
+      }*/
+      if(multi_player == 1 && (b.niv == 3 || b.niv == 4 || b.niv == 5)) {
+    SDL_Rect left = {0, 0, ecran->w / 2, ecran->h / 2};
+    SDL_Rect right = {ecran->w / 2, 0, ecran->w / 2, ecran->h / 2};
+    // Afficher la partie gauche de l'écran
+    aff_partage(b, ecran, left);
+    // Afficher la partie droite de l'écran
+    aff_partage(b, ecran, right);
+} else {
+    SDL_Rect full_screen = {0, 0, ecran->w, ecran->h};
+    Aff_Background(b, ecran, showPerso);
+}
+      if(right==1){
+         scrolling(&b,1,20);  
       }
-      else if(left==1 && (b.niv == 3 || b.niv == 4 || b.niv == 5)){
+      else if(left==1){
          scrolling(&b,2,20);
       }
-      else if(up==1 && (b.niv == 3 || b.niv == 4 || b.niv == 5)){
+      else if(up==1){
          scrolling(&b,3,20);
       }
-      else if(down==1 && (b.niv == 3 || b.niv == 4 || b.niv == 5)){
+      else if(down==1){
          scrolling(&b,4,20);
       }
           
