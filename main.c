@@ -8,6 +8,8 @@
 #include "fonctions.h"
 #include "enigme.h"
 #include "entite.h"
+#include "map1.h"
+#include "persotest.h"
 int main(int argc, char** argv) {
 
     SDL_Surface *ecran;
@@ -31,7 +33,19 @@ int main(int argc, char** argv) {
     int showPerso = 0;
     minimap m;
     int a=0;
+    SDL_Surface *fnoir;
 
+vie  v;
+initialiser_score(&v);
+fnoir=IMG_Load("noir.jpg");
+
+ 
+int up1;
+int upp;
+player.vitesseV=0;
+int downPressed=0;
+    int rightPressed = 0; // Variable pour indiquer si le bouton droit est enfoncé
+int leftPressed = 0;
     // Initialisation de SDL
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024);
@@ -57,6 +71,7 @@ int main(int argc, char** argv) {
     init_temps(&m);
     init_temps1(&m,200);
     initpoint(&m);
+    initPerso(&player);
     int right=0;
     int left=0;
     int up=0;
@@ -358,7 +373,82 @@ ecran = SDL_SetVideoMode(800, 630, 32, SDL_SWSURFACE | SDL_DOUBLEBUF | SDL_FULLS
        
  //304 ou 043      
       
-       
+       if(b.niv==5)
+{
+    switch (event.type)
+    {
+        printf("hi yumi");
+        //initPerso(&player);
+        case SDL_KEYDOWN:
+            switch (event.key.keysym.sym) {
+                case SDLK_UP:
+                    //yomna
+                    up1 = 1;
+                    saut(&player, 10, player.position.x, player.position.y,up1);
+                    //yomna wfet
+                    break;
+                /*case SDLK_DOWN:
+                    //yomna
+                    player.direction=6;
+                    animerPerso(&player);
+                    movePerso(&player, 2);
+                    //yomna wfet
+                    break;*/
+                //yomna
+                case SDLK_LEFT:
+                    leftPressed = 1;
+                    player.direction=1;
+                    animerPerso(&player);
+                    movePerso(&player, 2);
+                    break;
+                case SDLK_RIGHT:
+                    rightPressed = 1;
+                    player.direction=2;
+                    animerPerso(&player);
+                    movePerso(&player, 2);
+                    break;
+                //yomna
+                case SDLK_SPACE:
+                    upp=1;
+                    sautvert(&player , upp) ;
+                    break;
+                //yomna wfet
+            }
+            break;
+		 case SDL_KEYUP:
+            switch (event.key.keysym.sym) {
+                case SDLK_UP:
+                    up1=0;
+                    saut(&player, 10, player.position.x, player.position.y,up1);
+                    player.position.y = 0;
+                    break;
+                /*case SDLK_DOWN:
+                    downPressed=0;
+                    animerPerso(&player);
+                    movePerso(&player, 2);
+                    break;*/
+                case SDLK_LEFT:
+                    animerPerso(&player);
+                    movePerso(&player, 2);
+                    leftPressed = 0;
+                    break;
+                case SDLK_RIGHT:
+                    rightPressed = 0;
+                    animerPerso(&player);
+                    movePerso(&player, 2);
+                    break;
+                case SDLK_SPACE:
+                    upp = 0;
+                    break;
+            }
+            break;
+         afficherPerso(player, ecran);
+afficher_vie(&v,ecran);
+}
+	SDL_BlitSurface(fnoir,NULL, ecran, NULL);
+	 SDL_Flip(ecran);
+
+        SDL_Delay(15);
        if (b.niv == 0) {
            
             animation0(&b,ecran);
@@ -373,8 +463,77 @@ ecran = SDL_SetVideoMode(800, 630, 32, SDL_SWSURFACE | SDL_DOUBLEBUF | SDL_FULLS
              animation3(&b,ecran);
 		  animation4(&b,m.img1);
 		 animerEntity(&e);
-	
+	        player.direction=6;
+		afficherPerso(player, b.image[4]);
+		afficher_vie(&v,b.image[4]);
 	         animerEntity2(&e2);
+         }
+	 switch (event.type)
+    {
+        printf("hi yumi");
+       
+        case SDL_KEYDOWN:
+            switch (event.key.keysym.sym) {
+                case SDLK_UP:
+                    //yomna
+                    up1 = 1;
+                    saut(&player, 10, player.position.x, player.position.y,up1);
+                    //yomna wfet
+                    break;
+                case SDLK_DOWN:
+                    //yomna
+                    player.direction=6;
+                    animerPerso(&player);
+                    movePerso(&player, 2);
+                    //yomna wfet
+                    break;              
+            }
+            break;
+        case SDL_KEYUP:
+            switch (event.key.keysym.sym) {
+                case SDLK_UP:
+                    up1=0;
+                    saut(&player, 10, player.position.x, player.position.y,up1);
+                    player.position.y = 0;
+                    break;
+                case SDLK_DOWN:
+                    downPressed=0;
+                    animerPerso(&player);
+                    movePerso(&player, 2);
+                    break;
+                case SDLK_LEFT:
+                    animerPerso(&player);
+                    movePerso(&player, 2);
+                    leftPressed = 0;
+                    break;
+                case SDLK_RIGHT:
+                    rightPressed = 0;
+                    animerPerso(&player);
+                    movePerso(&player, 2);
+                    break;
+                case SDLK_SPACE:
+                    upp = 0;
+                    break;
+            }
+            break;
+    }
+
+    if (SDLK_RIGHT && SDLK_DOWN)
+    {
+        player.direction=6;
+        animerPerso(&player);
+        movePerso(&player, 2);
+    }
+
+    if (SDLK_LEFT && SDLK_DOWN)
+    {
+        player.direction=5;
+        animerPerso(&player);
+        movePerso(&player, 2);
+    }
+ 
+
+
          }
        if (b.niv==3){
            animation1(&b,ecran);
@@ -525,7 +684,10 @@ ecran = SDL_SetVideoMode(800, 630, 32, SDL_SWSURFACE | SDL_DOUBLEBUF | SDL_FULLS
     liberer_minimap1(&m);
     liberer_minimap2(&m);
     liberer_minimap3(&m);
- 
+    SDL_FreeSurface(perso);
+
+ liberer_vie(&v);
+liberer_perso(&player);
     TTF_Quit();
     Mix_CloseAudio();
     SDL_Quit();
