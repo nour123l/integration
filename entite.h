@@ -6,13 +6,14 @@
 #include <stdlib.h>
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
-
+#include <SDL/SDL_mixer.h>
 
 typedef struct{
     SDL_Surface *img[2][2];
     int direction;
     SDL_Rect pos;
     int anim;
+    Mix_Music *mus;
 }entite;
 
 /*typedef struct{
