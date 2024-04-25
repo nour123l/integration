@@ -184,6 +184,8 @@ int main(int argc, char** argv) {
                         b.niv = 3;  
                         afficherEnnemi( e,b.image[3]);
 		        afficherEnnemi2( e2,b.image[]);
+		        move(&e);
+	                move2(&e2);
                         Mix_PlayMusic(b.musicst,-1);
                         Mix_AllocateChannels(10);
                         Mix_VolumeMusic(b.vol);
@@ -195,14 +197,19 @@ int main(int argc, char** argv) {
                   case 12:
                         b.niv = 5;       
                         afficherEnnemi( e,b.image[5]);
-			            afficherEnnemi2( e2,b.image[5]);
+			 afficherEnnemi2( e2,b.image[5]);
+			  move(&e);
+	                  move2(&e2);
 			  afficherminimap3(m, b.image[5]);
                         afficherpoint(m, b.image[5]); 
                     break;
                   case 13:
-                        afficherEnnemi( e,b.image[4]);
-			            afficherEnnemi2( e2,b.image[4]);
-                        b.niv = 4;  // Background "stage3.png" pour le bouton mee1      
+                       
+                        b.niv = 4;  // Background "stage3.png" pour le bouton mee1 
+			   afficherEnnemi( e,b.image[4]);
+			afficherEnnemi2( e2,b.image[4]);
+			  move(&e);
+	                  move2(&e2);
                         afficherpoint(m, b.image[4]);
 	                afficherminimap1(m,b.image[4]);    
                         Mix_PlayMusic(b.musicst,-1);
@@ -356,13 +363,25 @@ ecran = SDL_SetVideoMode(800, 630, 32, SDL_SWSURFACE | SDL_DOUBLEBUF | SDL_FULLS
            
             animation0(&b,ecran);
         }
+	    if (b.niv == 5) {
+           
+            animerEntity(&e);
+	
+	    animerEntity2(&e2);
+        }
          if (b.niv==4){
              animation3(&b,ecran);
 		  animation4(&b,m.img1);
+		 animerEntity(&e);
+	
+	         animerEntity2(&e2);
          }
        if (b.niv==3){
            animation1(&b,ecran);
 	       animation5(&b,m.img2);
+	       animerEntity(&e);
+	
+	       animerEntity2(&e2);
            if (right==1){
                a++;
                b.vol++;
