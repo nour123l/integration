@@ -29,7 +29,7 @@ int main(int argc, char** argv) {
     SDL_Surface *perso;
     SDL_Rect posp;
     int showPerso = 0;
-     
+    minimap m;
     int a=0;
 
     // Initialisation de SDL
@@ -51,6 +51,12 @@ int main(int argc, char** argv) {
     tab_btnv(bv);
     initEnty(&e);
     initEnty2(&e2);
+    initmap1(&m);
+    initmap2(&m);
+    initmap3(&m);
+    init_temps(&m);
+    init_temps1(&m,200);
+    initpoint(&m);
     int right=0;
     int left=0;
     int up=0;
@@ -175,25 +181,33 @@ int main(int argc, char** argv) {
                     break;
                   case 11:
                      
-                        b.niv = 3;  // Background "stage1.png" pour le bouton terre1 
+                        b.niv = 3;  
                         afficherEnnemi( e,b.image[3]);
-			            afficherEnnemi2( e2,b.image[]);
+		        afficherEnnemi2( e2,b.image[]);
                         Mix_PlayMusic(b.musicst,-1);
                         Mix_AllocateChannels(10);
                         Mix_VolumeMusic(b.vol);
-                       
+                        afficherpoint(m, b.image[3]);
+	                afficherminimap2(m,b.image[3]);
+                        //animation5(&b,m.img2);
                     break;
                
                   case 12:
-                        b.niv = 5;  // Background "stage2.png" pour le bouton hwee1      
+                        b.niv = 5;       
                         afficherEnnemi( e,b.image[5]);
 			            afficherEnnemi2( e2,b.image[5]);
+			  afficherminimap3(m, b.image[5]);
+                        afficherpoint(m, b.image[5]); 
                     break;
                   case 13:
                         afficherEnnemi( e,b.image[4]);
 			            afficherEnnemi2( e2,b.image[4]);
                         b.niv = 4;  // Background "stage3.png" pour le bouton mee1      
-                        
+                        afficherpoint(m, b.image[4]);
+	                afficherminimap1(m,b.image[4]);    
+                        Mix_PlayMusic(b.musicst,-1);
+                        Mix_AllocateChannels(10);
+                        Mix_VolumeMusic(b.vol);
                     break;
                    
                  
@@ -244,7 +258,7 @@ int main(int argc, char** argv) {
                              }
                              B[detect].actif = 1;
                          }
-                   
+                         deplacerp(&m,0,10);
                         //scrolling(&b,3,20);
                         up=1;
                     break;
@@ -268,6 +282,7 @@ int main(int argc, char** argv) {
                                }
                                B[detect].actif = 1;
                        }
+		      deplacerp(&m,0,-3);
                       //scrolling(&b,4,20);
                       down=1;
                    break;
@@ -299,9 +314,16 @@ ecran = SDL_SetVideoMode(800, 630, 32, SDL_SWSURFACE | SDL_DOUBLEBUF | SDL_FULLS
                    case SDLK_LEFT:
                                  //scrolling(&b,2,20);
                          left=1;
+			   deplacerm(&m,-3,0);
+			 deplacerm(&m,-3,0);
+			 deplacerm(&m,-3,0);
+                         deplacerp(&m,-3,0);
                      break;
                    case SDLK_RIGHT:
-                                 //scrolling(&b,1,20);
+                        deplacerm(&m,3,0);
+			 deplacerm(&m,3,0);
+			 deplacerm(&m,3,0);
+                         deplacerp(&m,3,0);
                          right=1;
                      break;
                  
@@ -336,9 +358,11 @@ ecran = SDL_SetVideoMode(800, 630, 32, SDL_SWSURFACE | SDL_DOUBLEBUF | SDL_FULLS
         }
          if (b.niv==4){
              animation3(&b,ecran);
+		  animation4(&b,m.img1);
          }
        if (b.niv==3){
            animation1(&b,ecran);
+	       animation5(&b,m.img2);
            if (right==1){
                a++;
                b.vol++;
@@ -349,15 +373,10 @@ ecran = SDL_SetVideoMode(800, 630, 32, SDL_SWSURFACE | SDL_DOUBLEBUF | SDL_FULLS
      
         // Affichage du background
         Aff_Background(b, ecran, showPerso);
-    /*   if(multi_player==1 && (b.niv ==3 ||b.niv ==4 ||b.niv ==5 )){
-          SDL_Rect left={0,0,ecran->w /2 ,ecran->h /2};
-          SDL_Rect left={ecran->w /2,0,ecran->w /2 ,ecran->h /2};
-          aff_partage(b,ecran);
-       }
-       else{
-           SDL_Rect full_screen={0,0,ecran->w,ecran->h};
-           Aff_Background(b, ecran,&full_screen);
-      }*/
+	    affichertemp1(&m, ecran);
+        miseajour_temps1(&m);
+        affichertemp(&m, ecran);
+        miseajour_temps(&m);
       if(multi_player == 1 && (b.niv == 3 || b.niv == 4 || b.niv == 5)) {
     SDL_Rect left = {0, 0, ecran->w / 2, ecran->h / 2};
     SDL_Rect right = {ecran->w / 2, 0, ecran->w / 2, ecran->h / 2};
@@ -484,7 +503,9 @@ ecran = SDL_SetVideoMode(800, 630, 32, SDL_SWSURFACE | SDL_DOUBLEBUF | SDL_FULLS
     free_btn(B);
     Free_Background(&b);
     SDL_FreeSurface(perso);
-
+    liberer_minimap1(&m);
+    liberer_minimap2(&m);
+    liberer_minimap3(&m);
  
     TTF_Quit();
     Mix_CloseAudio();
