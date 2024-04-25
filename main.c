@@ -6,15 +6,17 @@
 #include "backgroundd.h"
 #include "boutonn.h"
 #include "fonctions.h"
+#include "enigme.h"
 
 int main(int argc, char** argv) {
 
     SDL_Surface *ecran;
     SDL_Event event;
     int quitter = 1;
-    int detect = 0;
-    int niv,i,j,past;
-   
+    int detect = 0; 
+    int niv,i,j,past,p,nouv;
+    int temps_actuel;
+    int continuer;
     bouton B[14];
     bouton bv[4];
     background b;
@@ -384,6 +386,85 @@ ecran = SDL_SetVideoMode(800, 630, 32, SDL_SWSURFACE | SDL_DOUBLEBUF | SDL_FULLS
        
         if (showPerso && B[7].actif==1) {
           SDL_BlitSurface(perso, NULL, ecran, &posp);
+        } 
+        if (b.niv==p) {
+          nouv=0;
+        }
+        else
+        {
+        nouv=1;
+        }
+        if ((b.camera.x==1150)&&(b.niv == 3 || b.niv == 4 || b.niv == 5)&&(nouv==1))
+        {
+         
+    p=b.niv;
+     enigme e;
+    genererenigme(&e,"enigme.txt");
+    init_enigme(&e);
+   
+   temps_actuel=0;
+   continuer=1;
+    while (continuer==1) {
+        animerenigme (&e);
+        aff_enigme(e,ecran);
+        SDL_Flip(ecran);
+       
+            SDL_Event event;
+            SDL_PollEvent(&event);
+       temps_actuel=SDL_GetTicks();
+       if((15000<temps_actuel)&&(e.etat==0))
+       {
+          //p->score--;le score diminue
+          e.etat=-1;
+          aff_enigme(e,ecran);
+         
+       }
+       else if(temps_actuel>20000)
+       {
+         
+          continuer=0;
+           
+       }
+       else
+          {
+            switch (event.type) {
+                case SDL_QUIT:
+                    continuer = 0;
+                   
+                    break;
+         
+                case SDL_KEYDOWN:
+                    switch (event.key.keysym.sym) {
+                        case SDLK_a:
+                        case SDLK_b:
+                        case SDLK_c:
+                          if(e.etat==0)
+                           {
+                            if (event.key.keysym.sym == e.rep_vrai) {
+                                e.etat=1;
+                             aff_enigme(e,ecran);
+                            } else {
+                                e.etat=-1;
+                                aff_enigme(e,ecran);
+                            }
+                           
+                            }
+                            break;
+                       
+                            case SDLK_ESCAPE:
+                              if (e.etat!=0){
+                              continuer=0;}
+                           
+                             break;
+                    }
+                    break;
+            }
+       
+ 
+   }
+   
+ }
+    freeEnigme(&e);
         }
    
            
