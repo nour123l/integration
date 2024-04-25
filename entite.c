@@ -117,7 +117,8 @@ void initEnty2(entite *e2){
 	e2->pos.w = e2->img[0][0]->w;
 	e2->pos.h = e2->img[0][0]->h;
 	e2->anim=0;
-
+        e2->mus=Mix_LoadMUS("tha7ka.mp3");
+	Mix_PlayMusic(e2->mus,-1);
 	
 }
 void afficherEnnemi2(entite e2,SDL_Surface* screen){
