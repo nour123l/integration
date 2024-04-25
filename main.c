@@ -7,7 +7,7 @@
 #include "boutonn.h"
 #include "fonctions.h"
 #include "enigme.h"
-
+#include "entite.h"
 int main(int argc, char** argv) {
 
     SDL_Surface *ecran;
@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
     int btPlus = 0;  
     int btMinus = 0;
     int maxVolumePresses = 4;
-   
+    entite e,e2;
     SDL_Surface *perso;
     SDL_Rect posp;
     int showPerso = 0;
@@ -49,7 +49,8 @@ int main(int argc, char** argv) {
     initson();
     tab_button(B);
     tab_btnv(bv);
- 
+    initEnty(&e);
+    initEnty2(&e2);
     int right=0;
     int left=0;
     int up=0;
@@ -174,18 +175,23 @@ int main(int argc, char** argv) {
                     break;
                   case 11:
                      
-                        b.niv = 3;  // Background "stage1.png" pour le bouton terre1      
+                        b.niv = 3;  // Background "stage1.png" pour le bouton terre1 
+                        afficherEnnemi( e,b.image[3]);
+			            afficherEnnemi2( e2,b.image[]);
                         Mix_PlayMusic(b.musicst,-1);
                         Mix_AllocateChannels(10);
-               Mix_VolumeMusic(b.vol);
+                        Mix_VolumeMusic(b.vol);
                        
                     break;
                
                   case 12:
                         b.niv = 5;  // Background "stage2.png" pour le bouton hwee1      
-                        
+                        afficherEnnemi( e,b.image[5]);
+			            afficherEnnemi2( e2,b.image[5]);
                     break;
                   case 13:
+                        afficherEnnemi( e,b.image[4]);
+			            afficherEnnemi2( e2,b.image[4]);
                         b.niv = 4;  // Background "stage3.png" pour le bouton mee1      
                         
                     break;
